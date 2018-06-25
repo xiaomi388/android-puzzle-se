@@ -2,7 +2,7 @@
 #define ROUTERS_H
 
 #include "defines.hpp"
-#include "handlers/test.hpp"
+#include "handlers/Test.hpp"
 
 
 namespace PuzzleServer {
