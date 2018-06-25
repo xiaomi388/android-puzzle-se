@@ -1,3 +1,0 @@
-[submodule "ext/soci"]
-	path = ext/soci
-	url = https://github.com/SOCI/soci.git
