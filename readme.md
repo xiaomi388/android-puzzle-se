@@ -8,7 +8,7 @@
 ./bin/PuzzleServer [development | production | test]
 ```
 
-## 编译说明
+## 🚀编译说明
 
 ```bash
 mkdir build
