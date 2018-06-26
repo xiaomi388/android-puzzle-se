@@ -47,3 +47,5 @@ HOST_PWD
 .DS_Store
 *.swo
 *.swp
+config/test.json
+config/production.json

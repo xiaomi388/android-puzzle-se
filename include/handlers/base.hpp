@@ -5,6 +5,9 @@
 
 namespace PuzzleServer {
 
+extern unique_ptr<ConnectionPool> pool;
+extern unique_ptr<json> config;
+
 class BaseController {
 };
 

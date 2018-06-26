@@ -1,0 +1,14 @@
+{
+    "mysql": {
+        "host": "localhost",
+        "user": "puzzle",
+        "passwd": "123456",
+        "charset": "utf8",
+        "database": "puzzle",
+        "port": 3306
+    },
+    "runtime": {
+        "port": 18080,
+        "host": "0.0.0.0"
+    }
+}
