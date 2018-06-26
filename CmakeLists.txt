@@ -20,7 +20,7 @@ option(BUILD_ENTRY "Build the Judge System main entry" ON)
 # header directories
 ###########################################################
 include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include")
-include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ext/soci/include")
+include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ext/fmt/include")
 
 IF (APPLE)
   include_directories("/usr/local/include/mysql")
@@ -39,7 +39,6 @@ file(GLOB ENTRY_FILE "${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp")
 # Necessary libraries
 #############################################################
 find_package(Boost 1.65 COMPONENTS system REQUIRED)
-
 
 # Force to build Release version
 set(CMAKE_BUILD_TYPE_SAVED "${CMAKE_BUILD_TYPE}")

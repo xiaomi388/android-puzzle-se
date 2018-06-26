@@ -39,8 +39,6 @@ class ConnectionPool : public mysqlpp::ConnectionPool {
   int m_max_idle_time;
 };
 
-extern shared_ptr<ConnectionPool> pool;
-
 }  // namespace PuzzleServer
 
 #endif /* CONNECTION_POOL_H */
