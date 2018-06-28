@@ -25,6 +25,9 @@ include_directories("${CMAKE_CURRENT_SOURCE_DIR}/ext/fmt/include")
 IF (APPLE)
   include_directories("/usr/local/include/mysql")
   include_directories("/usr/local/include/mysql++")
+ELSEIF (UNIX)
+  include_directories("/usr/include/mysql")
+  include_directories("/usr/include/mysql++")
 ENDIF ()
 
 ##############################################################
