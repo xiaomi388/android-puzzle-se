@@ -1,16 +1,17 @@
 #ifndef ROUTERS_H
 #define ROUTERS_H
 
+#include "Handlers.hpp"
 #include "defines.hpp"
-#include "handlers/Test.hpp"
-
 
 namespace PuzzleServer {
 
+
 void initRoute(crow::SimpleApp &app) {
-    CROW_ROUTE(app, "/").methods("GET"_method)(TestHandler::get);
+  CROW_ROUTE(app, "/user").methods("GET"_method)(UserHandler::Get);
+  CROW_ROUTE(app, "/user").methods("POST"_method)(UserHandler::Post);
 }
 
-} // namespace PuzzleServer
+}  // namespace PuzzleServer
 
 #endif
