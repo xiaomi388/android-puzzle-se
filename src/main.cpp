@@ -1,9 +1,7 @@
-#define FMT_HEADER_ONLY 1
-
 #include "ConnectionPool.hpp"
 #include "defines.hpp"
 #include "fmt/format.h"
-#include "routers.hpp"
+#include "Routers.hpp"
 // #include "Configure"
 
 using namespace PuzzleServer;

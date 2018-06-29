@@ -1,9 +1,12 @@
 #ifndef DEFINES_H
 #define DEFINES_H
 
+#define FMT_HEADER_ONLY 1
+
 #include "utility/crow_all.h"
 #include "utility/json.hpp"
 #include "fmt/format.h"
+#include "fmt/printf.h"
 
 #include <iostream>
 #include <string>
