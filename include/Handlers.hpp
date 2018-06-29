@@ -2,8 +2,8 @@
 #define HANDLERS_H
 
 #include <type_traits>
-#include "defines.hpp"
 #include "ConnectionPool.hpp"
+#include "defines.hpp"
 
 namespace PuzzleServer {
 
@@ -11,15 +11,11 @@ extern unique_ptr<ConnectionPool> pool;
 extern unique_ptr<json> config;
 
 class BaseController {
-  public:
-    static json return_json(const string &error = "", const vector<json> &content={}) {
-      std::ostringstream os;
-      json j;
-      j["error"] = error;
-      if (!content.empty()) j["content"] = content;
-      os << j;
-      return (os.str());
-    }
+ public:
+  static json return_json(const string& error = "",
+                          const vector<json>& content = {});
+
+  static string escapeSQL(const string& param);
 };
 
 class TestHandler : public BaseController {
@@ -34,7 +30,6 @@ class UserHandler : public BaseController {
   static string Post(const crow::request& req);
 };
 
-} // namespace PuzzleServer
+}  // namespace PuzzleServer
 
-
-#endif // HANDLERS_H
+#endif  // HANDLERS_H

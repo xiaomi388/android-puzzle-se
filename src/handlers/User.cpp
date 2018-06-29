@@ -9,6 +9,7 @@
 using namespace PuzzleServer;
 
 string UserHandler::Get(const crow::request& req) {
+  // This is for test, and a template, please don't edit it.
   vector<json> content;
   mysqlpp::ScopedConnection conn(*pool);
   mysqlpp::Query query = conn->query("select * from user");
@@ -27,6 +28,7 @@ string UserHandler::Get(const crow::request& req) {
 }
 
 string UserHandler::Post(const crow::request& req) {
+  // TODO: user register and login
   std::ostringstream os;
   return os.str();
 }
