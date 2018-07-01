@@ -56,14 +56,14 @@ crow::response RecordHandler::Post() {
 
   mysqlpp::ScopedConnection conn(*pool);
   mysqlpp::Query query = conn->query(fmt::format(
-          "insert into record(uid,score,time,mode) values({},{},{},'{}',{})", 
+          "insert into record(uid,score,time,mode) values({},{},'{}',{})", 
           escapeSQL(uid),escapeSQL(score),escapeSQL(playtime),escapeSQL(mode)));
   bool r = query.exec(); 
-  if (r) { // register success
+  if (r) { // insert success
     query = conn->query("select last_insert_id()"); //get new uid
-    mysqlpp::UseQueryResult res = query.use();
-    if (mysqlpp::Row row = res.fetch_row()) {
-      this->set_secure_cookie("uid", string(row[0]));
+    mysqlpp::StoreQueryResult res = query.store();
+    if (res && res.num_rows()) {
+      auto row = res[0];
       json rec = json::parse(fmt::sprintf(R"({
         "rid": "%s"
       })", row[0]));
