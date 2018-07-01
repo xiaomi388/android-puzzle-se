@@ -9,6 +9,7 @@
     },
     "runtime": {
         "port": 18080,
-        "host": "0.0.0.0"
+        "host": "0.0.0.0",
+        "cookie-secret": "android-puzzle-server-is-the-best"
     }
 }
