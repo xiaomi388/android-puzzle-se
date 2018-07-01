@@ -49,12 +49,26 @@ class UserHandler : public BaseController {
   crow::response Post();
 };
 
-// class RecordHandler : public BaseController {
-//  public:
-//   RecordHandler(const crow::request &r, crow::CookieParser::context &c);
-//   crow::response Get();
-//   crow::response Post();
-// };
+class RecordHandler : public BaseController {
+ public:
+  RecordHandler(const crow::request &r);
+  crow::response Get();
+  crow::response Post();
+};
+
+class UserRecordHandler : public BaseController {
+ public:
+  UserRecordHandler(const crow::request &r);
+  crow::response Get();
+  crow::response Post();
+};
+
+class PhotoHandler : public BaseController {
+ public:
+  PhotoHandler(const crow::request &r);
+  crow::response Get();
+  crow::response Post();
+};
 
 /* definition */
 

@@ -41,7 +41,7 @@ crow::response UserHandler::Get() {
         "password": "%s"
       })", row[0], row[1], row[2]));
       content.push_back(rec);
-      ctx.set_secure_cookie("uid", string(row[0]));
+      this->set_secure_cookie("uid", string(row[0]));
     }
   }
   return return_json("", content);
