@@ -8,7 +8,7 @@ cmake_minimum_required(VERSION 3.9.4)
 set(CMAKE_BUILD_TYPE Debug)
 
 set(PUZZLE_SERVER_TARGET PuzzleServer)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-long-long")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wno-long-long -std=c++11 -pthread")
 
 SET(CMAKE_CXX_COMPILER "/usr/bin/g++")
 
@@ -63,6 +63,8 @@ if (BUILD_ENTRY)
     ${CMAKE_THREAD_LIBS_INIT}
     mysqlclient
     mysqlpp
+    ssl
+    crypto
     )
   install(TARGETS ${PUZZLE_SERVER_TARGET} RUNTIME DESTINATION bin)
 endif()
