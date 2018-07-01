@@ -28,9 +28,10 @@ class BaseController {
   string return_json(const string &error = "",
                      const vector<json> &content = {});
   string escapeSQL(const string &param);
-  string get_argument(const string &param);
+  string get_argument(const string &param,
+                      const string &def = "MISSINGARGUMENT");
 
-  //TODO
+  // TODO
   void set_secure_cookie(const string &key, const string &value);
   string get_current_user_id();
 
@@ -42,7 +43,6 @@ class BaseController {
   crow::CookieParser::context &ctx;
   shared_ptr<QueryParser> query_params = nullptr;
 };
-
 
 class UserHandler : public BaseController {
  public:
@@ -88,7 +88,6 @@ crow::response BaseController::proxy(const crow::request &req) {
     res.body = fmt::format("500 Interval Error, reason: {}", e.what());
   }
   return res;
-
 }
 
 }  // namespace PuzzleServer

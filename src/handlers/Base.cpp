@@ -64,7 +64,8 @@ crow::response BaseController::Delete() {
   return crow::response(400);
 }
 
-string BaseController::get_argument(const string &param) {
+// TODO: add default value
+string BaseController::get_argument(const string &param, const string &def) {
   string arg;
   arg = this->req.url_params.get(param) ?: "";
 
@@ -74,8 +75,11 @@ string BaseController::get_argument(const string &param) {
       this->query_params = std::make_shared<QueryParser>(this->req.body);
     arg = this->query_params->get(param);
   }
-  if (arg.empty())
-    throw MissingArgumentException(fmt::format("Missing argument {}", param));
+  if (arg.empty()) {
+    if (def == "MISSINGARGUMENT")
+      throw MissingArgumentException(fmt::format("Missing argument {}", param));
+    return def;
+  }
   return arg;
 }
 
