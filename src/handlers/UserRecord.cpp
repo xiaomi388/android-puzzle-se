@@ -12,33 +12,31 @@ UserRecordHandler::UserRecordHandler(const crow::request &r) : BaseController(r)
 
 crow::response UserRecordHandler::Get() {
   vector<json> content;
-  auto mode = this->get_argument("mode");
+  auto mode = req.url_params.get("mode");
+  auto uid = this->get_current_user_id();
+  string sql;
 
-  // Just for debug, you can use get_current_user_id() to
-  // get the current login user's id.
-  if (this->get_current_user_id().empty()) {
-    cout << "当前用户没有登录" << endl;
-  } else {
-    cout << this->get_current_user_id() << endl;
+  if(mode == nullptr) { //all records
+    sql = fmt::format(
+    "select mode, score, time from record where uid = {} order by score limit 10", escapeSQL(uid));
+  }
+  else { //record sort by mode
+    sql=fmt::format(
+      "select mode, score, time from record where uid = {} and mode = {} order by score limit 10", 
+      escapeSQL(uid), escapeSQL(mode));
   }
 
-  // Find user info from database.
-  // If succeed, set a cookie to the current user.
-  // This is a meaningless action, just in order to 
-  // show how to connect to the database and set
-  // cookie for user.
   mysqlpp::ScopedConnection conn(*pool);
-  mysqlpp::Query query = conn->query(fmt::format(
-      "select * from user where username = {}", escapeSQL(mode)));
+  mysqlpp::Query query = conn->query(sql);
+
   if (mysqlpp::StoreQueryResult res = query.store()) {
     for (auto &row : res) {
       json rec = json::parse(fmt::sprintf(R"({
-        "uid": "%s",
-        "username": "%s",
-        "password": "%s"
+        "mode": "%s",
+        "score": "%s",
+        "time": "%s"
       })", row[0], row[1], row[2]));
       content.push_back(rec);
-      this->set_secure_cookie("uid", string(row[0]));
     }
   }
   return return_json("", content);
