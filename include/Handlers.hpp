@@ -81,6 +81,9 @@ crow::response BaseController::proxy(const crow::request &req) {
   } catch (MissingArgumentException &e) {
     res.code = 400;
     res.body = e.what();
+  } catch (std::exception &e) {
+    res.code = 500;
+    res.body = fmt::format("500 Interval Error, reason: {}", e.what());
   }
   return res;
 

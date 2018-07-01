@@ -8,10 +8,10 @@ namespace PuzzleServer {
 
 
 void initRoute(crow::App<crow::CookieParser> &app) {
-  CROW_ROUTE(app, "/user")(BaseController::proxy<UserHandler>);
-  CROW_ROUTE(app, "/photo")(BaseController::proxy<PhotoHandler>);
-  CROW_ROUTE(app, "/record")(BaseController::proxy<RecordHandler>);
-  CROW_ROUTE(app, "/user/record")(BaseController::proxy<UserRecordHandler>);
+  CROW_ROUTE(app, "/user").methods("POST"_method, "GET"_method)(BaseController::proxy<UserHandler>);
+  CROW_ROUTE(app, "/photo").methods("POST"_method, "GET"_method)(BaseController::proxy<PhotoHandler>);
+  CROW_ROUTE(app, "/record").methods("POST"_method, "GET"_method)(BaseController::proxy<RecordHandler>);
+  CROW_ROUTE(app, "/user/record").methods("POST"_method, "GET"_method)(BaseController::proxy<UserRecordHandler>);
 }
 
 }  // namespace PuzzleServer

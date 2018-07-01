@@ -14,7 +14,19 @@ string BaseController::return_json(const string &error,
 
 string BaseController::escapeSQL(const string &param) {
   // TODO: avoid sql injection
-  return param;
+  if (param.empty()) return {};
+  string res;
+  int i = 0;
+  while (param[i]) {
+    if (param[i] == '\'')
+      res += '"';
+    else if (param[i] == '\"')
+      res += '\\';
+    else
+      res += param[i];
+    i++;
+  }
+  return res;
 }
 
 BaseController::BaseController(const crow::request &r)
@@ -61,6 +73,10 @@ string BaseController::get_argument(const string &param) {
 
 void BaseController::set_secure_cookie(const string &key, const string &value) {
   // FIXME: use cookie-secret to encrypt the value
+
+
+
+
   ctx.set_cookie(key, value);
 }
 
