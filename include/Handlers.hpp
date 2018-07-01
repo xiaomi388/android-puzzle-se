@@ -5,6 +5,7 @@
 #include "ConnectionPool.hpp"
 #include "Exception.hpp"
 #include "defines.hpp"
+#include "utility/QueryParser.hpp"
 
 namespace PuzzleServer {
 
@@ -39,6 +40,7 @@ class BaseController {
  protected:
   const crow::request &req;
   crow::CookieParser::context &ctx;
+  shared_ptr<QueryParser> query_params = nullptr;
 };
 
 

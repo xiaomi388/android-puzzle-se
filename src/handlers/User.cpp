@@ -49,6 +49,7 @@ crow::response UserHandler::Get() {
 
 crow::response UserHandler::Post() {
   // TODO: user register and login
+  cout << this->get_argument("username") << endl;
   crow::response res;
   std::ostringstream os;
   return os.str();
