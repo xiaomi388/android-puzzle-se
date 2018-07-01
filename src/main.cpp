@@ -10,6 +10,7 @@ namespace PuzzleServer {
 
 unique_ptr<ConnectionPool> pool = nullptr;
 unique_ptr<json> config = nullptr;
+crow::App<crow::CookieParser> app;
 
 int main(int argc, char* argv[]) {
   if (argc < 2) {
@@ -30,7 +31,6 @@ int main(int argc, char* argv[]) {
       (*config)["mysql"]["port"], (*config)["mysql"]["user"],
       (*config)["mysql"]["passwd"], (*config)["mysql"]["charset"]);
 
-  crow::SimpleApp app;
   initRoute(app);
   app.port((*config)["runtime"]["port"]).multithreaded().run();
   return 0;
