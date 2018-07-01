@@ -27,7 +27,7 @@ class BaseController {
   string return_json(const string &error = "",
                      const vector<json> &content = {});
   string escapeSQL(const string &param);
-  char *get_argument(const string &param);
+  string get_argument(const string &param);
 
   //TODO
   void set_secure_cookie(const string &key, const string &value);

@@ -52,11 +52,11 @@ crow::response BaseController::Delete() {
   return crow::response(400);
 }
 
-char *BaseController::get_argument(const string &param) {
+string BaseController::get_argument(const string &param) {
   char *arg = this->req.url_params.get(param);
   if (arg == nullptr)
     throw MissingArgumentException(fmt::format("Missing argument {}", param));
-  return arg;
+  return string(arg);
 }
 
 void BaseController::set_secure_cookie(const string &key, const string &value) {
