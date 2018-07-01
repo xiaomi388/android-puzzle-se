@@ -63,6 +63,8 @@ if (BUILD_ENTRY)
     ${CMAKE_THREAD_LIBS_INIT}
     mysqlclient
     mysqlpp
+    ssl
+    crypto
     )
   install(TARGETS ${PUZZLE_SERVER_TARGET} RUNTIME DESTINATION bin)
 endif()
