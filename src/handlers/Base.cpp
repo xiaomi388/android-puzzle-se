@@ -1,4 +1,5 @@
 #include "Handlers.hpp"
+#include "utility/crypt.hpp"
 
 using namespace PuzzleServer;
 
@@ -64,7 +65,7 @@ crow::response BaseController::Delete() {
   return crow::response(400);
 }
 
-string BaseController::get_argument(const string &param) {
+string BaseController::get_argument(const string &param, const string &def) {
   string arg;
   arg = this->req.url_params.get(param) ?: "";
 
@@ -74,14 +75,16 @@ string BaseController::get_argument(const string &param) {
       this->query_params = std::make_shared<QueryParser>(this->req.body);
     arg = this->query_params->get(param);
   }
-  if (arg.empty())
-    throw MissingArgumentException(fmt::format("Missing argument {}", param));
+  if (arg.empty()) {
+    if (def == "MISSINGARGUMENT")
+      throw MissingArgumentException(fmt::format("Missing argument {}", param));
+    return def;
+  }
   return arg;
 }
 
 void BaseController::set_secure_cookie(const string &key, const string &value) {
-  // FIXME: use cookie-secret to encrypt the value
-  ctx.set_cookie(key, value);
+  ctx.set_cookie(key, EncodeAES((*config)["runtime"]["cookie-secret"], value));
 }
 
 string BaseController::get_current_user_id() {
@@ -89,6 +92,6 @@ string BaseController::get_current_user_id() {
   if (cookie.empty()) {
     return cookie;
   }
-  // FIXME: use cookie-secret to decrypt the user id
+  cookie = DecodeAES((*config)["runtime"]["cookie-secret"], ctx.get_cookie("uid"));
   return cookie;
 }
