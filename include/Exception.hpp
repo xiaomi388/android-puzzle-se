@@ -20,6 +20,12 @@ class MissingArgumentException : public Exception {
   virtual ~MissingArgumentException() {}
 };
 
+class MethodNotAllowException : public Exception {
+ public:
+  MethodNotAllowException(const string &msg = "") : Exception(msg) {}
+  virtual ~MethodNotAllowException() {}
+};
+
 } // PuzzleServer
 
 #endif /* EXCEPTION_H */

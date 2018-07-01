@@ -45,7 +45,7 @@ crow::response BaseController::handle() {
     default:
       break;
   }
-  return this->Get();
+  throw MethodNotAllowException("405 Method Not Allow");
 }
 
 crow::response BaseController::Get() {
@@ -65,18 +65,22 @@ crow::response BaseController::Delete() {
 }
 
 string BaseController::get_argument(const string &param) {
-  char *arg = this->req.url_params.get(param);
-  if (arg == nullptr)
+  string arg;
+  arg = this->req.url_params.get(param) ?: "";
+
+  // if url params can not find, then search in body
+  if (arg.empty()) {
+    if (this->query_params == nullptr)
+      this->query_params = std::make_shared<QueryParser>(this->req.body);
+    arg = this->query_params->get(param);
+  }
+  if (arg.empty())
     throw MissingArgumentException(fmt::format("Missing argument {}", param));
-  return string(arg);
+  return arg;
 }
 
 void BaseController::set_secure_cookie(const string &key, const string &value) {
   // FIXME: use cookie-secret to encrypt the value
-
-
-
-
   ctx.set_cookie(key, value);
 }
 
