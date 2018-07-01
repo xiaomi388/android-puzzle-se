@@ -32,7 +32,7 @@ crow::response UserHandler::Get() {
   // cookie for user.
   mysqlpp::ScopedConnection conn(*pool);
   mysqlpp::Query query = conn->query(fmt::format(
-      "select * from user where username = {}", escapeSQL(username)));
+      "select * from user where username = '{}'", escapeSQL(username)));
   if (mysqlpp::StoreQueryResult res = query.store()) {
     for (auto &row : res) {
       json rec = json::parse(fmt::sprintf(R"({
@@ -49,8 +49,46 @@ crow::response UserHandler::Get() {
 
 crow::response UserHandler::Post() {
   // TODO: user register and login
-  cout << this->get_argument("username") << endl;
-  crow::response res;
-  std::ostringstream os;
-  return os.str();
+  auto username = this->get_argument("username");
+  auto password = this->get_argument("passwd");
+  auto action = this->get_argument("action");
+
+  mysqlpp::ScopedConnection conn(*pool);
+
+  if(action == "login") {
+    mysqlpp::Query query = conn->query(fmt::format(
+        "select * from user where username = '{}'", escapeSQL(username)));
+    mysqlpp::UseQueryResult res = query.use();
+    if (mysqlpp::Row row = res.fetch_row()) {
+      if(string(row[2]) == password) { // login success
+        this->set_secure_cookie("uid", string(row[0]));
+        return return_json("");
+      }
+      else return return_json("密码错误");
+    }
+    else return return_json("用户名不存在");
+  }
+  else if(action == "register") {
+    mysqlpp::Query query = conn->query(fmt::format(
+        "select * from user where username = '{}'", escapeSQL(username)));
+    mysqlpp::UseQueryResult res = query.use();
+    if (mysqlpp::Row row = res.fetch_row()) {
+      return return_json("用户名已存在");
+    }
+    else { // username usable
+      mysqlpp::Query query = conn->query(fmt::format(
+          "insert into user(username, password) values('{}', '{}')", 
+          escapeSQL(username), escapeSQL(password)));
+      bool r = query.exec();    
+      if (r) { // register success
+        query = conn->query("select last_insert_id()"); //get new uid
+        res = query.use();
+        if (mysqlpp::Row row = res.fetch_row()) {
+          this->set_secure_cookie("uid", string(row[0]));
+        }    
+        return return_json("");
+      }
+      else return return_json("数据库异常错误"); // insert failed
+    }
+  }
 }
