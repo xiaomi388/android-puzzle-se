@@ -58,8 +58,9 @@ crow::response UserHandler::Post() {
   if(action == "login") {
     mysqlpp::Query query = conn->query(fmt::format(
         "select * from user where username = '{}'", escapeSQL(username)));
-    mysqlpp::UseQueryResult res = query.use();
-    if (mysqlpp::Row row = res.fetch_row()) {
+    mysqlpp::StoreQueryResult res = query.store();
+    if (res && res.num_rows()) {
+      auto row = res[0];
       if(string(row[2]) == password) { // login success
         this->set_secure_cookie("uid", string(row[0]));
         return return_json("");
@@ -71,19 +72,20 @@ crow::response UserHandler::Post() {
   else if(action == "register") {
     mysqlpp::Query query = conn->query(fmt::format(
         "select * from user where username = '{}'", escapeSQL(username)));
-    mysqlpp::UseQueryResult res = query.use();
-    if (mysqlpp::Row row = res.fetch_row()) {
+    mysqlpp::StoreQueryResult res = query.store();
+    if (res && res.num_rows()) {
       return return_json("用户名已存在");
     }
     else { // username usable
-      mysqlpp::Query query = conn->query(fmt::format(
+      query = conn->query(fmt::format(
           "insert into user(username, password) values('{}', '{}')", 
           escapeSQL(username), escapeSQL(password)));
       bool r = query.exec();    
       if (r) { // register success
         query = conn->query("select last_insert_id()"); //get new uid
-        res = query.use();
-        if (mysqlpp::Row row = res.fetch_row()) {
+        res = query.store();
+        if (res && res.num_rows()) {
+          auto row = res[0];
           this->set_secure_cookie("uid", string(row[0]));
         }    
         return return_json("");
