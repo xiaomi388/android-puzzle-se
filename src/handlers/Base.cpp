@@ -1,5 +1,6 @@
 #include "Handlers.hpp"
 #include "utility/crypt.hpp"
+#include "SessionParser.hpp"
 
 using namespace PuzzleServer;
 
@@ -31,7 +32,7 @@ string BaseController::escapeSQL(const string &param) {
 }
 
 BaseController::BaseController(const crow::request &r)
-    : req(r), ctx(app.get_context<crow::CookieParser>(r)) {}
+    : req(r), ctx(app.get_context<SessionParser>(r)) {}
 
 crow::response BaseController::handle() {
   switch (req.method) {

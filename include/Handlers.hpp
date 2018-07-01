@@ -6,12 +6,13 @@
 #include "Exception.hpp"
 #include "defines.hpp"
 #include "utility/QueryParser.hpp"
+#include "SessionParser.hpp"
 
 namespace PuzzleServer {
 
 extern unique_ptr<ConnectionPool> pool;
 extern unique_ptr<json> config;
-extern crow::App<crow::CookieParser> app;
+extern crow::App<SessionParser> app;
 
 class BaseController {
  public:
@@ -40,7 +41,7 @@ class BaseController {
 
  protected:
   const crow::request &req;
-  crow::CookieParser::context &ctx;
+  SessionParser::context &ctx;
   shared_ptr<QueryParser> query_params = nullptr;
 };
 

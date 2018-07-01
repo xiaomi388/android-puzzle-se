@@ -2,6 +2,7 @@
 #include "defines.hpp"
 #include "fmt/format.h"
 #include "Routers.hpp"
+#include "SessionParser.hpp"
 // #include "Configure"
 
 using namespace PuzzleServer;
@@ -10,7 +11,7 @@ namespace PuzzleServer {
 
 unique_ptr<ConnectionPool> pool = nullptr;
 unique_ptr<json> config = nullptr;
-crow::App<crow::CookieParser> app;
+crow::App<SessionParser> app;
 
 int main(int argc, char* argv[]) {
   if (argc < 2) {
