@@ -45,7 +45,7 @@ crow::response BaseController::handle() {
     default:
       break;
   }
-  return this->Get();
+  throw MethodNotAllowException("405 Method Not Allow");
 }
 
 crow::response BaseController::Get() {
