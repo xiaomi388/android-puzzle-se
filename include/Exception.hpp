@@ -20,6 +20,12 @@ class MissingArgumentException : public Exception {
   virtual ~MissingArgumentException() {}
 };
 
+class UnauthorizedException : public Exception {
+ public:
+  UnauthorizedException(const string &msg = "") : Exception(msg) {}
+  virtual ~UnauthorizedException() {}
+};
+
 class MethodNotAllowException : public Exception {
  public:
   MethodNotAllowException(const string &msg = "") : Exception(msg) {}

@@ -91,7 +91,7 @@ void BaseController::set_secure_cookie(const string &key, const string &value) {
 string BaseController::get_current_user_id() {
   string cookie = ctx.get_cookie("uid");
   if (cookie.empty()) {
-    return cookie;
+    throw UnauthorizedException("403 Forbidden: Please login first!");
   }
   cookie = DecodeAES((*config)["runtime"]["cookie-secret"], ctx.get_cookie("uid"));
   return cookie;
