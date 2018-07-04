@@ -16,7 +16,7 @@ struct SessionParser {
     std::string get_cookie(const std::string& key) const;
 
     void set_cookie(const std::string& key, const std::string& value,
-                    const int expired_time = 3600);
+                    const int expired_time = 3600*24);
   };
 
   void before_handle(crow::request& req, crow::response& res, context& ctx);

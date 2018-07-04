@@ -22,7 +22,7 @@ void SessionParser::context::set_cookie(const std::string& key,
                                         int expired_time) {
   cookies_to_add.emplace(key, value);
   // add session
-  sessions.insert({value, std::time(0) + expired_time});
+  sessions[value] = std::time(0) + expired_time;
 }
 
 void SessionParser::before_handle(request& req, response& res, context& ctx) {
