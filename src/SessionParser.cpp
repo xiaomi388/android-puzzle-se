@@ -70,3 +70,10 @@ void SessionParser::after_handle(request& /*req*/, response& res,
       res.add_header("Set-Cookie", cookie.first + "=" + cookie.second);
   }
 }
+
+void SessionParser::context::remove_session(const std::string& session) {
+  auto it = sessions.find(session);
+  if (it != sessions.end()) {
+    sessions.erase(it);
+  }
+}

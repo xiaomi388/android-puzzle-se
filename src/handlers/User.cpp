@@ -48,7 +48,7 @@ crow::response UserHandler::Get() {
 }
 
 crow::response UserHandler::Post() {
-  // TODO: user register and login
+  // TODO: user register and login and logout
   auto username = this->get_argument("username");
   auto password = this->get_argument("passwd");
   auto action = this->get_argument("action");
@@ -92,5 +92,8 @@ crow::response UserHandler::Post() {
       }
       else return return_json("数据库异常错误"); // insert failed
     }
+  } else if(action == "logout") {
+    ctx.remove_session(ctx.get_cookie("uid"));
   }
+  return return_json("");
 }
