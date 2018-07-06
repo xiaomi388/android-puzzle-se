@@ -52,7 +52,7 @@ crow::response UserHandler::Post() {
   // TODO: user register and login and logout
   auto action = this->get_argument("action");
 
-  if (action != "logout") {
+  if (action == "logout") {
     ctx.remove_session(ctx.get_cookie("uid"));
     return return_json("");
   }
