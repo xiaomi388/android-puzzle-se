@@ -65,6 +65,12 @@ class UserRecordHandler : public BaseController {
   crow::response Get();
   crow::response Post();
 };
+class UserInfoHandler : public BaseController {
+ public:
+  UserInfoHandler(const crow::request &r);
+  crow::response Get();
+  crow::response Post();
+};
 
 class PhotoHandler : public BaseController {
  public:
