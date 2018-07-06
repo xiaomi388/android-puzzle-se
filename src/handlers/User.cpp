@@ -27,7 +27,7 @@ crow::response UserHandler::Get() {
 
   // Find user info from database.
   // If succeed, set a cookie to the current user.
-  // This is a meaningless action, just in order to 
+  // This is a meaningless action, just in order to
   // show how to connect to the database and set
   // cookie for user.
   mysqlpp::ScopedConnection conn(*pool);
@@ -39,7 +39,8 @@ crow::response UserHandler::Get() {
         "uid": "%s",
         "username": "%s",
         "password": "%s"
-      })", row[0], row[1], row[2]));
+      })",
+                                          row[0], row[1], row[2]));
       content.push_back(rec);
       this->set_secure_cookie("uid", string(row[0]));
     }
@@ -49,51 +50,53 @@ crow::response UserHandler::Get() {
 
 crow::response UserHandler::Post() {
   // TODO: user register and login and logout
+  auto action = this->get_argument("action");
+
+  if (action != "logout") {
+    ctx.remove_session(ctx.get_cookie("uid"));
+    return return_json("");
+  }
+
   auto username = this->get_argument("username");
   auto password = this->get_argument("passwd");
-  auto action = this->get_argument("action");
 
   mysqlpp::ScopedConnection conn(*pool);
 
-  if(action == "login") {
+  if (action == "login") {
     mysqlpp::Query query = conn->query(fmt::format(
         "select * from user where username = '{}'", escapeSQL(username)));
     mysqlpp::StoreQueryResult res = query.store();
     if (res && res.num_rows()) {
       auto row = res[0];
-      if(string(row[2]) == password) { // login success
+      if (string(row[2]) == password) {  // login success
         this->set_secure_cookie("uid", string(row[0]));
         return return_json("");
-      }
-      else return return_json("密码错误");
-    }
-    else return return_json("用户名不存在");
-  }
-  else if(action == "register") {
+      } else
+        return return_json("密码错误");
+    } else
+      return return_json("用户名不存在");
+  } else if (action == "register") {
     mysqlpp::Query query = conn->query(fmt::format(
         "select * from user where username = '{}'", escapeSQL(username)));
     mysqlpp::StoreQueryResult res = query.store();
     if (res && res.num_rows()) {
       return return_json("用户名已存在");
-    }
-    else { // username usable
-      query = conn->query(fmt::format(
-          "insert into user(username, password) values('{}', '{}')", 
-          escapeSQL(username), escapeSQL(password)));
-      bool r = query.exec();    
-      if (r) { // register success
-        query = conn->query("select last_insert_id()"); //get new uid
+    } else {  // username usable
+      query = conn->query(
+          fmt::format("insert into user(username, password) values('{}', '{}')",
+                      escapeSQL(username), escapeSQL(password)));
+      bool r = query.exec();
+      if (r) {                                           // register success
+        query = conn->query("select last_insert_id()");  // get new uid
         res = query.store();
         if (res && res.num_rows()) {
           auto row = res[0];
           this->set_secure_cookie("uid", string(row[0]));
-        }    
+        }
         return return_json("");
-      }
-      else return return_json("数据库异常错误"); // insert failed
+      } else
+        return return_json("数据库异常错误");  // insert failed
     }
-  } else if(action == "logout") {
-    ctx.remove_session(ctx.get_cookie("uid"));
   }
   return return_json("");
 }
