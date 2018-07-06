@@ -8,7 +8,8 @@
 
 using namespace PuzzleServer;
 
-UserRecordHandler::UserRecordHandler(const crow::request &r) : BaseController(r) {}
+UserRecordHandler::UserRecordHandler(const crow::request &r)
+    : BaseController(r) {}
 
 crow::response UserRecordHandler::Get() {
   vector<json> content;
@@ -16,14 +17,16 @@ crow::response UserRecordHandler::Get() {
   auto uid = this->get_current_user_id();
   string sql;
 
-  if(mode == nullptr) { //all records
+  if (mode == nullptr) {  // all records
     sql = fmt::format(
-    "select mode, score, time from record where uid = {} order by score limit 10", escapeSQL(uid));
-  }
-  else { //record sort by mode
-    sql=fmt::format(
-      "select mode, score, time from record where uid = {} and mode = {} order by score limit 10", 
-      escapeSQL(uid), escapeSQL(mode));
+        "select mode, score, time from record where uid = {} order by score "
+        "limit 10",
+        escapeSQL(uid));
+  } else {  // record sort by mode
+    sql = fmt::format(
+        "select mode, score, time from record where uid = {} and mode = {} "
+        "order by score limit 10",
+        escapeSQL(uid), escapeSQL(mode));
   }
 
   mysqlpp::ScopedConnection conn(*pool);
