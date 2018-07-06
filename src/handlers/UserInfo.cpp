@@ -13,7 +13,7 @@ UserInfoHandler::UserInfoHandler(const crow::request &r) : BaseController(r) {}
 crow::response UserInfoHandler::Get() {
   vector<json> content;
   auto uid = this->get_current_user_id();
-  string sql,sql1,sql2,sql3;
+  string sql,sql1,sql2,sql3,sql4;
   sql = fmt::format(
     "select username from user where uid = {}", escapeSQL(uid)
 	);	
@@ -26,30 +26,38 @@ crow::response UserInfoHandler::Get() {
   sql3 = fmt::format(
     "SELECT COUNT(DISTINCT uid) from record where mode = 5 AND score <= (SELECT MIN(score) from record where uid = {} AND mode = 5)", escapeSQL(uid)
 	);
+   sql4 = fmt::format(
+    "SELECT COUNT(DISTINCT uid) from record where mode = 6 AND score <= (SELECT MIN(score) from record where uid = {} AND mode = 6)", escapeSQL(uid)
+	);
   mysqlpp::ScopedConnection conn(*pool);
   mysqlpp::Query query = conn->query(sql);
   mysqlpp::Query query1 = conn->query(sql1);
   mysqlpp::Query query2 = conn->query(sql2);
   mysqlpp::Query query3 = conn->query(sql3);
+  mysqlpp::Query query4 = conn->query(sql4);
   mysqlpp::StoreQueryResult res = query.store();
   mysqlpp::StoreQueryResult res1 = query1.store();
   mysqlpp::StoreQueryResult res2 = query2.store();
   mysqlpp::StoreQueryResult res3 = query3.store();
-
+  mysqlpp::StoreQueryResult res4 = query4.store();
   auto &row = res[0];
   auto &row1 = res1[0];
   auto &row2 = res2[0];
   auto &row3 = res3[0];
+  auto &row4 = res4[0];
   int a = atoi(row1[0].c_str());
   int b = atoi(row2[0].c_str());
   int c = atoi(row3[0].c_str());
+  int d = atoi(row4[0].c_str());
   if(a==0){
     if(b!=0)a = b;
     if(c!=0)a = c;
+    if(d!=0)a = d;
   }
   if(a!=0){
     if(b!=0)a = a>b?b:a;
     if(c!=0)a = a>c?c:a;
+    if(d!=0)a = a>d?d:a;
   }
   json rec = json::parse(fmt::sprintf(R"({
          "username": "%s",
