@@ -36,12 +36,27 @@ crow::response UserInfoHandler::Get() {
   mysqlpp::StoreQueryResult res2 = query2.store();
   mysqlpp::StoreQueryResult res3 = query3.store();
 
-
+  auto &row = res[0];
+  auto &row1 = res1[0];
+  auto &row2 = res2[0];
+  auto &row3 = res3[0];
+  int a = atoi(row1[0].c_str());
+  int b = atoi(row2[0].c_str());
+  int c = atoi(row3[0].c_str());
+  if(a==0){
+    if(b!=0)a = b;
+    if(c!=0)a = c;
+  }
+  if(a!=0){
+    if(b!=0)a = a>b?b:a;
+    if(c!=0)a = a>c?c:a;
+  }
   json rec = json::parse(fmt::sprintf(R"({
-        "username": "%s",
-        "rank":"%s"
-      })", res, res1));
+         "username": "%s",
+         "rank":"%d"
+  })", row[0],a));
   content.push_back(rec);
+
   return return_json("", content);
 }
 crow::response UserInfoHandler::Post() {
