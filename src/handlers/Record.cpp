@@ -17,17 +17,19 @@ crow::response RecordHandler::Get() {
 
   if(mode == nullptr) { //all records
     sql = R"(
-    select U.username, R.mode, R.score 
+    select U.username, R.mode, MAX(R.score) as sc
     from user U, record R 
     where U.uid = R.uid 
-    order by R.score limit 10)";
+    group by U.username, R.mode
+    order by sc limit 10)";
   }
   else { //record sort by mode
     sql = fmt::format(R"(
-    select U.username, R.mode, R.score 
+    select U.username, R.mode, MAX(R.score) as sc
     from user U, record R 
     where U.uid = R.uid and R.mode = {}
-    order by R.score limit 10)", 
+    group by U.username, R.mode
+    order by sc limit 10)", 
     escapeSQL(mode));
   }
 
