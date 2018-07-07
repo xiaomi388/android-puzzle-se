@@ -17,7 +17,7 @@ crow::response RecordHandler::Get() {
 
   if(mode == nullptr) { //all records
     sql = R"(
-    select U.username, R.mode, MAX(R.score) as sc
+    select U.username, R.mode, MIN(R.score) as sc
     from user U, record R 
     where U.uid = R.uid 
     group by U.username, R.mode
@@ -25,7 +25,7 @@ crow::response RecordHandler::Get() {
   }
   else { //record sort by mode
     sql = fmt::format(R"(
-    select U.username, R.mode, MAX(R.score) as sc
+    select U.username, R.mode, MIN(R.score) as sc
     from user U, record R 
     where U.uid = R.uid and R.mode = {}
     group by U.username, R.mode
